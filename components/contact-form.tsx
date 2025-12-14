@@ -51,7 +51,7 @@ export function ContactForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4" data-netlify="true">
+    <form onSubmit={handleSubmit} className="space-y-4">
       {isSubmitted ? (
         <div className="bg-green-50 p-4 rounded-lg flex items-center gap-3 text-green-700">
           <CheckCircle className="h-5 w-5" />

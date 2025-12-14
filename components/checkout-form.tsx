@@ -105,7 +105,7 @@ export function CheckoutForm() {
     `;
 
     const whatsappUrl =
-      "https://wa.me/9910646415?text=" + encodeURIComponent(message);
+      "https://wa.me/919910646415?text=" + encodeURIComponent(message);
 
     window.open(whatsappUrl, "_blank");
   };
