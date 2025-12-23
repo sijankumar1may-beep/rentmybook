@@ -139,7 +139,7 @@ export function CheckoutForm() {
     const value = e?.target?.value;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
-
+console.log("cartItems",cartItems)
   return (
     <Card>
       <CardHeader>
@@ -147,7 +147,7 @@ export function CheckoutForm() {
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="flex justify-between">
-          <span>₹3/day (30-day minimum)</span>
+          <span>₹3/day (30-day minimum)</span>*{cartItems?.[0]?.quantity}
           <span>₹{total.toFixed(2)}</span>
         </div>
         <div className="flex justify-between">

@@ -27,7 +27,8 @@ window.open(whatsappUrl, "_blank");
           <p className="text-lg text-gray-700 mb-8">
           Perfect for all students.
           <span className="block">No subscription. No security deposit.</span>
-          <span className="block text-black font-semibold mt-5">Minimum rental: 30 days · ₹40 one‑time delivery & return (within 5 km)</span>
+          <span className="block text-black font-semibold mt-5">Minimum rental: 30 days</span>
+          <span className="block text-black font-semibold mt-2" >One‑time charge for delivery & return (within 5 km): ₹40 </span>
           </p>
           <div className="flex flex-col sm:flex-row gap-4">
             <a href="#books">

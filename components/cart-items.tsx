@@ -1,32 +1,35 @@
-"use client"
+"use client";
 
-import { useCart } from "@/context/cart-context"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { Minus, Plus, Trash2 } from "lucide-react"
-import { useRouter } from "next/navigation"
-import { useAuth } from "@/context/auth-context"
-import { useEffect } from "react"
+import { useCart } from "@/context/cart-context";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Minus, Plus, Trash2 } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/context/auth-context";
+import { useEffect } from "react";
 
 export function CartItems() {
-  const { cartItems, increaseQuantity, decreaseQuantity, removeFromCart } = useCart()
-  const { user } = useAuth()
-  const router = useRouter()
+  const { cartItems, increaseQuantity, decreaseQuantity, removeFromCart } =
+    useCart();
+  const { user } = useAuth();
+  const router = useRouter();
 
   useEffect(() => {
-    // if (cartItems.length === 0) {
-    //   router.push("/")
-    // }
-  }, [cartItems.length, router])
+    if (cartItems.length === 0) {
+      router.push("/");
+    }
+  }, [cartItems.length, router]);
 
   if (cartItems.length === 0) {
     return (
       <div className="text-center py-12">
         <h2 className="text-2xl font-bold mb-4">Your cart is empty</h2>
-        <p className="text-gray-500 mb-8">A new chapter begins when you add your first book!</p>
+        <p className="text-gray-500 mb-8">
+          A new chapter begins when you add your first book!
+        </p>
         <Button onClick={() => router.push("/#books")}>Search Books</Button>
       </div>
-    )
+    );
   }
 
   return (
@@ -37,7 +40,10 @@ export function CartItems() {
             <div className="flex items-center p-4">
               <div className="w-20 h-20 relative rounded overflow-hidden mr-4">
                 <img
-                  src={`https://covers.openlibrary.org/a/id/${item?.cover_i}-S.jpg` || `/placeholder.svg?height=80&width=80`}
+                  src={
+                    `https://covers.openlibrary.org/a/id/${item?.cover_i}-S.jpg` ||
+                    `/placeholder.svg?height=80&width=80`
+                  }
                   alt={item.title}
                   className="object-cover w-full h-full"
                 />
@@ -48,22 +54,39 @@ export function CartItems() {
                 <div className="flex items-center justify-between mt-2">
                   {/* <span className="font-medium text-primary">₹{item.price}</span> */}
                   <div className="flex flex-col justify-start">
-                    {/* <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => decreaseQuantity(item.cover_i)}>
-                      <Minus className="h-4 w-4" />
-                    </Button> */}
-                   <p className=" font-bold">Quantity: <span className="font-bold">{item.quantity}</span></p>
-                   <p className="font-bold"> Rental period: Minimum 30 days</p>
-                    {/* <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => increaseQuantity(item.cover_i)}>
-                      <Plus className="h-4 w-4" />
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="h-8 w-8 text-red-500"
-                      onClick={() => removeFromCart(item.cover_i)}
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </Button> */}
+                    <div className="font-semibold">
+                      <div className="font-bold flex flex-row justify-start">
+                        <span>Quantity: </span>
+                        <Button
+                          variant="outline"
+                          size="icon"
+                          className="h-8 w-8 mx-4"
+                          onClick={() => decreaseQuantity(item.cover_i)}
+                        >
+                          <Minus className="h-4 w-4" />
+                        </Button>
+
+                        <span className="font-bold">{item.quantity}</span>
+
+                        <Button
+                          variant="outline"
+                          size="icon"
+                          className="h-8 w-8 mx-4"
+                          onClick={() => increaseQuantity(item.cover_i)}
+                        >
+                          <Plus className="h-4 w-4" />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-8 w-8 text-red-500"
+                          onClick={() => removeFromCart(item.cover_i)}
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </div>
+                    <p className="font-bold"> Rental period: Minimum 30 days</p>
                   </div>
                 </div>
               </div>
@@ -72,5 +95,5 @@ export function CartItems() {
         </Card>
       ))}
     </div>
-  )
+  );
 }

@@ -25,7 +25,7 @@ export function BookList() {
     0
   );
   const bookDataAPI = "https://openlibrary.org/search.json";
-const router=useRouter();
+  const router = useRouter();
   const getBookData = async (bookName: string) => {
     const data = await fetch(
       `${bookDataAPI}?q=${bookName}&fields=key,title,author_name,cover_i`
@@ -59,18 +59,19 @@ const router=useRouter();
     if (bookdata?.docs?.length > 0) {
       setBookData(filteredData);
     } else {
+      setBookData([]);
       console.log("API is failed");
     }
     //
   };
-  
+
   useEffect(() => {
     fetchData(activeCategory);
   }, [activeCategory]);
 
-  const goToTheCart=()=>{
-    router.push('/cart')
-  }
+  const goToTheCart = () => {
+    router.push("/cart");
+  };
   return (
     <div className="py-8" id="books">
       {/* <h2 className="text-3xl font-bold mb-8 text-center">Our Menu</h2> */}
@@ -96,12 +97,26 @@ const router=useRouter();
               fetchData(e.target.value);
             }}
           />
-          <button className="absolute top-2 md:top-2 left-2 text-white" onClick={()=>{
-            fetchData(bookSearchQuery)
-          }}>
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="size-6">
-          <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
-          </svg>
+          <button
+            className="absolute top-2 md:top-2 left-2 text-white"
+            onClick={() => {
+              fetchData(bookSearchQuery);
+            }}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              className="size-6"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
+              />
+            </svg>
           </button>
         </div>
 
@@ -126,24 +141,60 @@ const router=useRouter();
         </div>
       </div>
       <div className="">
-      <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-4 gap-6">
-              {bookData?.map((item: any) => {
-                console.log("bookDatabookData",bookData)
-                return <FoodCard key={item?.cover_i} book={item} />;
-              })}
+        <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-4 gap-6">
+          {bookData?.length > 0 &&
+            bookData?.map((item: any) => {
+              console.log("bookDatabookData", bookData);
+              return <FoodCard key={item?.cover_i} book={item} />;
+            })}
+        </div>
+        <div className="flex flex-col justify-center items-center">
+          {bookData?.length == 0 && (
+            <>
+              <span className="block font-semibold text-xl mb-2">
+                We couldn’t find this book right now 📘
+              </span>
+              <span className="block text-gray-600 mb-5 max-w-md">
+                Don’t worry — tell us what you’re looking for and we’ll try to
+                arrange it for you.
+              </span>
+              <button
+                onClick={() => {
+                  router.push({
+                    pathname: "/requestbook",
+                    query: {
+                      bookName: bookSearchQuery,
+                    },
+                  });
+                }}
+                className="bg-brand-orange hover:bg-brand-orange/90 text-white font-medium py-3 px-6 rounded-md transition-colors"
+              >
+                Request this book
+              </button>
+            </>
+          )}
+        </div>
       </div>
-      </div>
-      <div className="text-center mt-10">
+      {/* <div className="text-center mt-10">
         <p className="text-gray-600 mb-6">Want to see our full book list?</p>
         <Link href="/#books">
           <button className="bg-brand-orange hover:bg-brand-orange/90 text-white font-medium py-2 px-6 rounded-md transition-colors">
             View Book List
           </button>
         </Link>
-      </div>
-      {totalItems>0 && <div className="fixed bottom-1 z-30 bg-orange-600 hover:bg-green-600 w-[90%] md:hidden text-center rounded-full">
-        <button className=" p-4 mx-8" onClick={()=>{goToTheCart()}}>Place order</button>
-      </div>}
+      </div> */}
+      {totalItems > 0 && (
+        <div className="fixed bottom-1 z-30 bg-orange-600 hover:bg-green-600 w-[90%] md:hidden text-center rounded-full">
+          <button
+            className=" p-4 mx-8"
+            onClick={() => {
+              goToTheCart();
+            }}
+          >
+            Place order
+          </button>
+        </div>
+      )}
     </div>
   );
 }
