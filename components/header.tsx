@@ -18,25 +18,26 @@ export default function Header() {
   const { user, logout } = useAuth();
   const { cartItems } = useCart();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const router=useRouter();
+  const router = useRouter();
   const totalItems = cartItems.reduce(
     (total, item) => total + item.quantity,
     0
   );
 
-  const goTotheBookList=()=>{
+  const goTotheBookList = () => {
     router.push('/#books')
+    //window.scrollTo({ top: 500, behavior: 'smooth' });
   }
   return (
     <header className="border-b bg-gray-300 sticky top-0 z-10 bg-gray-100 font-bold">
       <div className="container mx-auto px-4 py-4 flex items-center justify-between">
         <Link href="/" className="text-xl font-bold text-brand-orange">
-          <span className="text-black">RentMy</span><span>Book</span>
+          <span className="text-black">RentMy</span><span>Books</span>
         </Link>
-        <button onClick={()=>{goTotheBookList()}} className="md:hidden">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-[4.5rem] h-[2.1rem] text-brand-orange">
-        <path fill-rule="evenodd" d="M10.5 3.75a6.75 6.75 0 1 0 0 13.5 6.75 6.75 0 0 0 0-13.5ZM2.25 10.5a8.25 8.25 0 1 1 14.59 5.28l4.69 4.69a.75.75 0 1 1-1.06 1.06l-4.69-4.69A8.25 8.25 0 0 1 2.25 10.5Z" clip-rule="evenodd" />
-        </svg>
+        <button onClick={() => { goTotheBookList() }} className="md:hidden">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-[4.5rem] h-[2.1rem] text-brand-orange">
+            <path fillRule="evenodd" d="M10.5 3.75a6.75 6.75 0 1 0 0 13.5 6.75 6.75 0 0 0 0-13.5ZM2.25 10.5a8.25 8.25 0 1 1 14.59 5.28l4.69 4.69a.75.75 0 1 1-1.06 1.06l-4.69-4.69A8.25 8.25 0 0 1 2.25 10.5Z" clipRule="evenodd" />
+          </svg>
         </button>
         <Link
           href="/cart"
@@ -57,7 +58,7 @@ export default function Header() {
         >
           <Menu className="h-6 w-6 font-bold" />
         </Button>
-        
+
         {/* Desktop navigation */}
         <nav className="hidden md:flex items-center gap-6">
           <Link
@@ -78,11 +79,11 @@ export default function Header() {
           >
             Contact
           </Link>
-          <button onClick={()=>{goTotheBookList()}}>
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-[4.5rem] h-[2.1rem] text-brand-orange">
-        <path fill-rule="evenodd" d="M10.5 3.75a6.75 6.75 0 1 0 0 13.5 6.75 6.75 0 0 0 0-13.5ZM2.25 10.5a8.25 8.25 0 1 1 14.59 5.28l4.69 4.69a.75.75 0 1 1-1.06 1.06l-4.69-4.69A8.25 8.25 0 0 1 2.25 10.5Z" clip-rule="evenodd" />
-        </svg>
-        </button>
+          <button onClick={() => { goTotheBookList() }}>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-[4.5rem] h-[2.1rem] text-brand-orange">
+              <path fillRule="evenodd" d="M10.5 3.75a6.75 6.75 0 1 0 0 13.5 6.75 6.75 0 0 0 0-13.5ZM2.25 10.5a8.25 8.25 0 1 1 14.59 5.28l4.69 4.69a.75.75 0 1 1-1.06 1.06l-4.69-4.69A8.25 8.25 0 0 1 2.25 10.5Z" clipRule="evenodd" />
+            </svg>
+          </button>
           <Link href="/cart" className="relative text-brand-orange">
             <ShoppingCart className="h-6 w-6" />
             {totalItems > 0 && (

@@ -7,7 +7,7 @@ const Footer: React.FC = () => {
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div>
-            <h3 className="text-xl font-bold mb-4">Rent<span className="text-brand-orange">My</span>Book</h3>
+            <h3 className="text-xl font-bold mb-4">Rent<span className="text-brand-orange">My</span>Books</h3>
             <p className="text-black mb-4">Learn more. Spend less.</p>
             <div className="flex space-x-4">
               <a href="#" className="text-black hover:text-brand-orange transition-colors">
@@ -34,9 +34,9 @@ const Footer: React.FC = () => {
           <div>
             <h4 className="text-lg font-semibold mb-4">Quick Links</h4>
             <ul className="space-y-2">
-              <li><a href="#" className="text-black hover:text-brand-orange transition-colors">Home</a></li>
-              <li><a href="#book" className="text-black hover:text-brand-orange transition-colors">Books</a></li>
-              <li><a href="#faq" className="text-black hover:text-brand-orange transition-colors">FAQ</a></li>
+              <li><a href="/#" className="text-black hover:text-brand-orange transition-colors">Home</a></li>
+              <li><a href="/#books" className="text-black hover:text-brand-orange transition-colors">Books</a></li>
+              <li><a href="/#faq" className="text-black hover:text-brand-orange transition-colors">FAQ</a></li>
               <li><a href="/about" className="text-black hover:text-brand-orange transition-colors">About Us</a></li>
               <li><a href="/contact" className="text-black hover:text-brand-orange transition-colors">Contact</a></li>
             </ul>
@@ -57,19 +57,19 @@ const Footer: React.FC = () => {
             <h4 className="text-lg font-semibold mb-4">Contact Info</h4>
             <address className="not-italic text-black">
               <p className="mb-2">New Ashok Nagar, New Delhi</p>
-              <p className="mb-2">Email: info@rentmybook.co</p>
+              <p className="mb-2">Email: info@rentmybook.in</p>
             </address>
           </div>
         </div>
         
         <div className="border-t border-gray-800 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
           <p className="text-black text-sm mb-4 md:mb-0">
-            &copy; {new Date().getFullYear()} RentMyBook. All rights reserved.
+            &copy; {new Date().getFullYear()} RentMyBooks. All rights reserved.
           </p>
           <div className="flex space-x-6">
-            <a href="#" className="text-sm text-black hover:text-brand-orange transition-colors">Privacy Policy</a>
-            <a href="#" className="text-sm text-black hover:text-brand-orange transition-colors">Terms of Service</a>
-            <a href="#" className="text-sm text-black hover:text-brand-orange transition-colors">FAQ</a>
+            <a href="/#" className="text-sm text-black hover:text-brand-orange transition-colors">Privacy Policy</a>
+            <a href="/#" className="text-sm text-black hover:text-brand-orange transition-colors">Terms of Service</a>
+            <a href="/#faq" className="text-sm text-black hover:text-brand-orange transition-colors">FAQ</a>
           </div>
         </div>
       </div>

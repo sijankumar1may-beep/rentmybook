@@ -1,18 +1,18 @@
 // pages/_document.tsx
 import Document, { Html, Head, Main, NextScript } from 'next/document';
+import Script from 'next/script';
 
 class MyDocument extends Document {
   render() {
     return (
       <Html lang="en">
         <Head>
-          <title>Rent Books Online in India @ ₹3/Day | RentMyBooks</title>
-          <meta name="description" content="Rent books online in India at just ₹3 per day. Affordable book rental for students with fast delivery and wide book collection. Save money with RentMyBooks." />
+          <Script id="google-tag-manager" strategy="afterInteractive" src="https://www.googletagmanager.com/gtm.js?id=GTM-N4KNXKQ6" />
           <link rel="icon" href="/rentmybooklogo.png" />
-          <meta name="keywords" content="rent books online, book rental india, rent textbooks, rent books for students, online book rental, cheap book rent, rent books india, textbook rental india, rent academic books
-"/>
         </Head>
         <body>
+          <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-N4KNXKQ6"
+            height="0" width="0" style={{ display: "none", visibility: "hidden" }}></iframe></noscript>
           <Main />
           <NextScript />
         </body>

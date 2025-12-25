@@ -1,27 +1,29 @@
 import Image from "next/image"
 import { Card, CardContent } from "@/components/ui/card"
 import { CheckCircle } from "lucide-react"
+import SEO from "@/components/Seo";
 
 export default function AboutPage() {
   return (
     <div className="container mx-auto px-4 py-12">
+      <SEO title="About Us | RentMyBooks" description="About RentMyBook. We are a team of students who are passionate about making learning affordable and accessible for every student." canonical="https://rentmybooks.in/about" />
       <h1 className="text-3xl font-bold mb-8 text-center">About RentMyBook</h1>
 
       <div className="grid md:grid-cols-2 gap-12 mb-16 items-center">
         <div>
           <h2 className="text-2xl font-semibold mb-4">Our Story</h2>
           <p className="text-gray-600 mb-4">
-  RentMyBook was founded in 2024 with a mission to make learning affordable and accessible for every student. 
-  We noticed how expensive textbooks and study materials had become, especially for school and college students who need books only for a short time.
-</p>
-<p className="text-gray-600 mb-4">
-  What started as a small idea to share books within our community quickly grew into a student-friendly rental marketplace. 
-  Today, RentMyBook allows students to rent books at the lowest price and even earn money by renting out the books they already own.
-</p>
+            RentMyBooks was founded in 2025 with a mission to make learning affordable and accessible for every student.
+            We noticed how expensive textbooks and study materials had become, especially for school and college students who need books only for a short time.
+          </p>
+          <p className="text-gray-600 mb-4">
+            What started as a small idea to share books within our community quickly grew into a student-friendly rental marketplace.
+            Today, RentMyBooks allows students to rent books at the lowest price and even earn money by renting out the books they already own.
+          </p>
 
-<p className="text-gray-600">
-  Our goal is simple: reduce educational costs, promote book-sharing, and build a smarter, more supportive learning ecosystem.
-</p>
+          <p className="text-gray-600">
+            Our goal is simple: reduce educational costs, promote book-sharing, and build a smarter, more supportive learning ecosystem.
+          </p>
         </div>
         <div className="relative h-80 rounded-lg overflow-hidden">
           <Image src="/rentmybooklogo.png?height=100&width=100" alt="Our Logo" fill className="bg-cover rounded-full" />
@@ -38,7 +40,7 @@ export default function AboutPage() {
                   <CheckCircle className="h-6 w-6 text-primary" />
                 </div>
                 <h3 className="text-xl font-medium mb-2">Affordable Pricing</h3>
-<p className="text-gray-600">Rent books at the lowest rates. No need to spend hundreds or thousands buying new textbooks.</p>
+                <p className="text-gray-600">Rent books at the lowest rates. No need to spend hundreds or thousands buying new textbooks.</p>
               </div>
             </CardContent>
           </Card>
@@ -50,7 +52,7 @@ export default function AboutPage() {
                   <CheckCircle className="h-6 w-6 text-primary" />
                 </div>
                 <h3 className="text-xl font-medium mb-2">Wide Book Collection</h3>
-<p className="text-gray-600">From school textbooks to competitive exam guides — choose from thousands of titles.</p></div>
+                <p className="text-gray-600">From school textbooks to competitive exam guides — choose from thousands of titles.</p></div>
             </CardContent>
           </Card>
 
@@ -61,7 +63,7 @@ export default function AboutPage() {
                   <CheckCircle className="h-6 w-6 text-primary" />
                 </div>
                 <h3 className="text-xl font-medium mb-2">Easy Delivery & Returns</h3>
-<p className="text-gray-600">We deliver books to your doorstep and pick them up when you're done — hassle-free learning.</p>
+                <p className="text-gray-600">We deliver books to your doorstep and pick them up when you're done — hassle-free learning.</p>
               </div>
             </CardContent>
           </Card>

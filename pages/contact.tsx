@@ -1,9 +1,12 @@
 import { ContactForm } from "@/components/contact-form";
 import { MapPin, Phone, Mail, Clock } from "lucide-react";
+import SEO from "@/components/Seo";
 
 export default function ContactPage() {
   return (
+
     <div className="container mx-auto px-4 py-12">
+      <SEO title="Contact Us | RentMyBooks" description="Contact us for any questions or feedback. We're here to help you." canonical="https://rentmybooks.in/contact" />
       <h1 className="text-3xl font-bold mb-8 text-center">Contact Us</h1>
 
       <div className="grid md:grid-cols-2 gap-12">
@@ -45,7 +48,7 @@ export default function ContactPage() {
                 <Mail className="w-6 h-6 text-primary mt-1" />
                 <div>
                   <h3 className="font-medium">Email</h3>
-                  <p className="text-gray-600">info@rentmybook.com</p>
+                  <p className="text-gray-600">info@rentmybook.in</p>
                 </div>
               </div>
 

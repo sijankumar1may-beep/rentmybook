@@ -4,6 +4,7 @@ import { useState } from "react";
 import { FoodCard } from "@/components/food-card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { foodItems } from "@/data/food-items";
+import { useRef } from "react";
 import Link from "next/link";
 import { useEffect } from "react";
 import { useCart } from "@/context/cart-context";
@@ -12,6 +13,7 @@ export function BookList() {
   const [activeCategory, setActiveCategory] = useState("NCERT");
   const [bookData, setBookData] = useState<any>();
   const [bookSearchQuery, setBookSearchQuery] = useState<string>("");
+  const inputRef = useRef<HTMLInputElement>(null);
   const categories = [
     { id: "maths", name: "Maths" },
     { id: "physics", name: "Physics" },
@@ -27,15 +29,21 @@ export function BookList() {
   const bookDataAPI = "https://openlibrary.org/search.json";
   const router = useRouter();
   const getBookData = async (bookName: string) => {
-    const data = await fetch(
-      `${bookDataAPI}?q=${bookName}&fields=key,title,author_name,cover_i`
-    );
+    try {
+      const data = await fetch(
+        `${bookDataAPI}?q=${bookName}&fields=key,title,author_name,cover_i`
+      );
+      return data.json();
+    } catch (error) {
+      console.log(error)
+    }
 
-    return data.json();
+
+
   };
   const fetchData = async (bookQuery: string) => {
     const bookdata = await getBookData(bookQuery);
-    console.log("bookdata", bookdata);
+
 
     const filteredData = bookdata?.docs?.filter((item: any) => {
       if (bookSearchQuery != "") {
@@ -55,12 +63,12 @@ export function BookList() {
         }
       }
     });
-    console.log("filteredData", filteredData);
+
     if (bookdata?.docs?.length > 0) {
       setBookData(filteredData);
     } else {
       setBookData([]);
-      console.log("API is failed");
+
     }
     //
   };
@@ -72,6 +80,17 @@ export function BookList() {
   const goToTheCart = () => {
     router.push("/cart");
   };
+
+  useEffect(() => {
+    const pathname = router.asPath;
+    if (pathname.includes("#books")) {
+      inputRef.current?.focus();
+
+    }
+
+  }, [router, router.asPath]);
+
+
   return (
     <div className="py-8" id="books">
       {/* <h2 className="text-3xl font-bold mb-8 text-center">Our Menu</h2> */}
@@ -86,9 +105,10 @@ export function BookList() {
       <div className="flex flex-col md:flex-row justify-evenly mb-4">
         <div className="mb-[5px] md:mb-0 md:w-[20%] flex relative md:h-[2.5rem]">
           <input
-            className="text-white relative pl-8 bg-orange-600 focus:bg-green-500 placeholder:text-white placeholder:italic ...  p-[.5rem] w-full rounded-lg"
+            className="text-white relative pl-8 bg-orange-600 focus:bg-green-500 focus:border-orange-600 focus:border-solid focus:border-[5px] placeholder:text-white placeholder:italic ...  p-[.5rem] w-full rounded-lg"
             placeholder="Search any book..."
             type="text"
+            ref={inputRef}
             name="search"
             value={bookSearchQuery}
             onBlur={(e) => setBookSearchQuery("")}
@@ -107,13 +127,13 @@ export function BookList() {
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
-              stroke-width="1.5"
+              strokeWidth="1.5"
               stroke="currentColor"
               className="size-6"
             >
               <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeLinecap="round"
+                strokeLinejoin="round"
                 d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
               />
             </svg>
@@ -144,7 +164,7 @@ export function BookList() {
         <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-4 gap-6">
           {bookData?.length > 0 &&
             bookData?.map((item: any) => {
-              console.log("bookDatabookData", bookData);
+
               return <FoodCard key={item?.cover_i} book={item} />;
             })}
         </div>
