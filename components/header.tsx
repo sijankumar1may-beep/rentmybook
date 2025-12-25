@@ -62,7 +62,7 @@ export default function Header() {
         {/* Desktop navigation */}
         <nav className="hidden md:flex items-center gap-6">
           <Link
-            href="#books"
+            href="/#books"
             className="text-sm font-bold hover:text-primary text-brand-orange"
           >
             Books

@@ -9,9 +9,11 @@ import { Inter } from 'next/font/google';
 import '../styles/globals.css';
 import { Toaster } from "@/components/ui/toaster"
 import pushToDataLayer from '@/lib/utils';
+import Head from 'next/head';
 import { useEffect } from 'react';
 const inter = Inter({ subsets: ['latin'] });
 import { useRouter } from 'next/router';
+import Script from 'next/script';
 function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter();
   const url = router.asPath;
@@ -20,20 +22,38 @@ function MyApp({ Component, pageProps }: AppProps) {
   }, [router, router.asPath])
 
   return (
-    <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
-      <AuthProvider>
-        <CartProvider>
-          <div className="flex min-h-screen flex-col">
-            <Header />
-            <main className="flex-1 hero-pattern">
-              <Component {...pageProps} />
-            </main>
-            <Footer />
-          </div>
-          <Toaster />
-        </CartProvider>
-      </AuthProvider>
-    </ThemeProvider>
+    <>
+      
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-TLH377T15B"
+          strategy="beforeInteractive"
+        />
+        <Script id="google-analytics" strategy="beforeInteractive">
+          {`
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){window.dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-TLH377T15B');
+  `}
+        </Script>
+    
+      <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
+
+        <AuthProvider>
+          <CartProvider>
+            <div className="flex min-h-screen flex-col">
+              <Header />
+              <main className="flex-1 hero-pattern">
+                <Component {...pageProps} />
+              </main>
+              <Footer />
+            </div>
+            <Toaster />
+          </CartProvider>
+        </AuthProvider>
+      </ThemeProvider>
+    </>
+
   );
 }
 
