@@ -7,9 +7,9 @@ import {
   useEffect,
   type ReactNode,
 } from "react";
-import type { BookItem } from "@/types/food";
+import type { BookItem } from "@/lib/bookDataModel";
 
-interface CartItem extends BookItem {
+export interface CartItem extends BookItem {
   quantity: number;
 }
 
@@ -21,12 +21,15 @@ interface CartContextType {
   decreaseQuantity: (id: string) => void;
   clearCart: () => void;
   calculateTotal: () => number;
+  addToOrderHistoryCart: (item: BookItem) => void;
+  historyCartItems: CartItem[];
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export function CartProvider({ children }: { children: ReactNode }) {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  const [historyCartItems, setHistoryCartItems] = useState<CartItem[]>([]);
 
   // Load cart from localStorage on initial render
   useEffect(() => {
@@ -45,14 +48,31 @@ export function CartProvider({ children }: { children: ReactNode }) {
     localStorage.setItem("cart", JSON.stringify(cartItems));
   }, [cartItems]);
 
+  const addToOrderHistoryCart = (item: BookItem) => {
+    setHistoryCartItems((prevHistoryItems) => {
+      const existingItem = prevHistoryItems.find(
+        (cartItem) => cartItem.id === item.id
+      );
+      if (existingItem) {
+        return prevHistoryItems.map((cartItem) =>
+          cartItem.id === item.id
+            ? { ...cartItem, quantity: cartItem.quantity + 1 }
+            : cartItem
+        );
+      } else {
+        return [...prevHistoryItems, { ...item, quantity: 1 }];
+      }
+    });
+  };
+
   const addToCart = (item: BookItem) => {
     setCartItems((prevItems) => {
       const existingItem = prevItems.find(
-        (cartItem) => cartItem.cover_i === item.cover_i
+        (cartItem) => cartItem.id === item.id
       );
       if (existingItem) {
         return prevItems.map((cartItem) =>
-          cartItem.cover_i === item.cover_i
+          cartItem.id === item.id
             ? { ...cartItem, quantity: cartItem.quantity + 1 }
             : cartItem
         );
@@ -63,13 +83,13 @@ export function CartProvider({ children }: { children: ReactNode }) {
   };
 
   const removeFromCart = (id: string) => {
-    setCartItems((prevItems) => prevItems.filter((item) => item.cover_i !== id));
+    setCartItems((prevItems) => prevItems.filter((item) => item.id !== id));
   };
 
   const increaseQuantity = (id: string) => {
     setCartItems((prevItems) =>
       prevItems.map((item) =>
-        item.cover_i === id ? { ...item, quantity: item.quantity + 1 } : item
+        item.id === id ? { ...item, quantity: item.quantity + 1 } : item
       )
     );
   };
@@ -78,23 +98,23 @@ export function CartProvider({ children }: { children: ReactNode }) {
     setCartItems((prevItems) =>
       prevItems
         .map((item) =>
-          item.cover_i === id && item.quantity > 1
+          item.id === id && item.quantity > 1
             ? { ...item, quantity: item.quantity - 1 }
             : item
         )
-        .filter((item) => !(item.cover_i === id && item.quantity === 1))
+        .filter((item) => !(item.id === id && item.quantity === 1))
     );
   };
 
   const clearCart = () => {
+    cartItems.forEach((item) => {
+      addToOrderHistoryCart(item);
+    });
     setCartItems([]);
   };
 
   const calculateTotal = () => {
-    return cartItems.reduce(
-      (total, item) => total + 90 * item.quantity,
-      0
-    );
+    return cartItems.reduce((total, item) => total + 90 * item.quantity, 0);
   };
 
   return (
@@ -107,6 +127,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
         decreaseQuantity,
         clearCart,
         calculateTotal,
+        addToOrderHistoryCart,
+        historyCartItems,
       }}
     >
       {children}

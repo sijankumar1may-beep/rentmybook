@@ -1,17 +1,18 @@
 "use client";
 
 import { useState } from "react";
-import { FoodCard } from "@/components/food-card";
+import { BookCard } from "@/components/bookcard";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { foodItems } from "@/data/food-items";
 import { useRef } from "react";
-import Link from "next/link";
 import { useEffect } from "react";
 import { useCart } from "@/context/cart-context";
-import { Router, useRouter } from "next/router";
+import { useRouter } from "next/router";
+import { useQuery } from "@tanstack/react-query";
+import { BookItem } from "@/lib/bookDataModel";
+
 export function BookList() {
   const [activeCategory, setActiveCategory] = useState("NCERT");
-  const [bookData, setBookData] = useState<any>();
+  const [bookData, setBookData] = useState<BookItem[]>([]);
   const [bookSearchQuery, setBookSearchQuery] = useState<string>("");
   const inputRef = useRef<HTMLInputElement>(null);
   const categories = [
@@ -26,70 +27,62 @@ export function BookList() {
     (total, item) => total + item.quantity,
     0
   );
-  const bookDataAPI = "https://openlibrary.org/search.json";
+  const bookDataAPI = "https://www.googleapis.com/books/v1/volumes";
   const router = useRouter();
-  const getBookData = async (bookName: string) => {
+
+  const getBookData = async ({
+    queryKey,
+  }: {
+    queryKey: [string, string, string];
+  }) => {
+    const [books, searchQuery, activeCategory] = queryKey;
+
     try {
-      const data = await fetch(
-        `${bookDataAPI}?q=${bookName}&fields=key,title,author_name,cover_i`
-      );
+      let data;
+      if (searchQuery != "") {
+        data = await fetch(
+          `${bookDataAPI}?q=intitle:${searchQuery}&maxResults=20&printType=books&projection=full`
+        );
+      } else {
+        data = await fetch(
+          `${bookDataAPI}?q=intitle:${activeCategory}&maxResults=20&printType=books&projection=full`
+        );
+      }
+
       return data.json();
     } catch (error) {
-      console.log(error)
+      console.log(error);
+      throw error;
     }
-
-
-
   };
+  useEffect(() => {
+    console.log("bookDatabookData", bookData);
+  }, [bookData]);
+
+  const { data } = useQuery({
+    queryKey: ["Books", bookSearchQuery, activeCategory],
+    queryFn: getBookData,
+    staleTime: 1,
+  });
+
   const fetchData = async (bookQuery: string) => {
-    const bookdata = await getBookData(bookQuery);
-
-
-    const filteredData = bookdata?.docs?.filter((item: any) => {
-      if (bookSearchQuery != "") {
-        if (
-          item?.title
-            ?.toLowerCase()
-            ?.includes(bookSearchQuery?.toLowerCase()) ||
-          item?.title?.toLowerCase()?.includes(activeCategory.toLowerCase())
-        ) {
-          return item;
-        }
-      } else {
-        if (
-          item?.title?.toLowerCase()?.includes(activeCategory.toLowerCase())
-        ) {
-          return item;
-        }
-      }
-    });
-
-    if (bookdata?.docs?.length > 0) {
-      setBookData(filteredData);
-    } else {
-      setBookData([]);
-
-    }
     //
   };
 
   useEffect(() => {
-    fetchData(activeCategory);
-  }, [activeCategory]);
+    console.log("bookdata", data);
+    if (data?.items?.length > 0) {
+      setBookData(data.items);
+    }
+  }, [data]);
 
-  const goToTheCart = () => {
-    router.push("/cart");
-  };
 
   useEffect(() => {
     const pathname = router.asPath;
     if (pathname.includes("#books")) {
       inputRef.current?.focus();
-
     }
-
   }, [router, router.asPath]);
-
 
   return (
     <div className="py-8" id="books">
@@ -164,8 +157,7 @@ export function BookList() {
         <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-4 gap-6">
           {bookData?.length > 0 &&
             bookData?.map((item: any) => {
-
-              return <FoodCard key={item?.cover_i} book={item} />;
+              return <BookCard key={item?.id} book={item} />;
             })}
         </div>
         <div className="flex flex-col justify-center items-center">
@@ -204,16 +196,12 @@ export function BookList() {
         </Link>
       </div> */}
       {totalItems > 0 && (
-        <div className="fixed bottom-1 z-30 bg-orange-600 hover:bg-green-600 w-[90%] md:hidden text-center rounded-full">
-          <button
-            className=" p-4 mx-8"
-            onClick={() => {
-              goToTheCart();
-            }}
-          >
-            Place order
-          </button>
-        </div>
+        <a
+          className="fixed bottom-1 z-30 p-[1rem] bg-orange-600 hover:bg-green-600 w-[90%] md:hidden text-center rounded-full text-white"
+          href="/cart"
+        >
+          Place order
+        </a>
       )}
     </div>
   );

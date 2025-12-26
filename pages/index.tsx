@@ -10,9 +10,9 @@ export default function Home() {
     <SEO title="Rent Books Online in India @ ₹3/Day | RentMyBooks" description="Rent books online in India at just ₹3 per day. Affordable book rental for students with fast delivery and wide book collection. Save money with RentMyBooks." canonical="https://rentmybooks.in"/>
     <div className="container mx-auto px-4 py-8">
       <Hero />
-      
-      <Workingmodel />
       <BookList />
+      <Workingmodel />
+      
       <Futureplane />
       {/* <Pricing /> */}
     </div>

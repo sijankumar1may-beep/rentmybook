@@ -1,7 +1,5 @@
 "use client";
-
 import type React from "react";
-
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useCart } from "@/context/cart-context";
@@ -12,8 +10,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import Link from "next/link";
-import axios from "axios";
 
 interface CheckoutForm {
   BookNames: string[];
@@ -24,7 +20,7 @@ interface CheckoutForm {
 }
 
 export function CheckoutForm() {
-  const { cartItems, clearCart, calculateTotal } = useCart();
+  const { cartItems, clearCart, calculateTotal,historyCartItems } = useCart();
   const [userAddress, setUserAddress] = useState<string>("");
   const { user } = useAuth();
   const router = useRouter();
@@ -48,9 +44,10 @@ export function CheckoutForm() {
   useEffect(() => {
     formData["TotalPrice"] = grandTotal.toString();
     formData["BookNames"] = cartItems.map((item) => {
-      return item.title;
+      return item?.volumeInfo?.title;
     });
   }, [grandTotal]);
+
   const [formData, setFormData] = useState<CheckoutForm>(defaultObject);
 
   const getActualAddress = async (lat: string, long: string) => {
@@ -63,6 +60,7 @@ export function CheckoutForm() {
 
     return data.display_name;
   };
+
   function getMyCurrentLocation() {
     if (!navigator.geolocation) {
       alert("Geolocation is not supported by your browser");
@@ -93,19 +91,44 @@ export function CheckoutForm() {
       }
     );
   }
+
+  const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
   const sendToWhatsapp = () => {
-    const message = `
-    *Confirm Your Rental 📚*
-    *Books*: ${formData.BookNames}
-    *Address*: ${formData.Address}
-    *Total Cost*: ${formData.TotalPrice}
+    // const message = `
+    // *Confirm Your Rental 📚*
+    // *Books*: ${formData.BookNames}
+    // *Address*: ${formData.Address}
+    // *Total Cost*: ${formData.TotalPrice}
+    // *User Mobile Number*:${formData.MobileNumber}
+    // *PaymentOption*:${formData.PaymentOption}
+    // *No payment required now. We’ll confirm availability and delivery time on WhatsApp.*
+    // `;
+    const whatsappMessage = `
+    📚 New Book Order – RentMyBooks
+    
+    ${cartItems
+      .map(
+        (item, index) => `
+    *${index + 1}. ${item.volumeInfo.title}*
+    *Author:* ${item.volumeInfo.authors?.join(", ")}
+    *Qty:* ${item.quantity}
+    *Price per day:* ₹${30} × ${
+          item.quantity
+        } = ₹${(30 * item.quantity)}
+    `
+      )
+      .join("")}
+    ----------------------
+    🧾 Order Summary
+    *Total Items:* ${totalItems}
+    *Total Rental charge:* ₹${totalItems*30}
+    *Total Amount (including one time delivery + return charge):* ₹${totalItems*30+deliveryFee}
     *User Mobile Number*:${formData.MobileNumber}
     *PaymentOption*:${formData.PaymentOption}
     *No payment required now. We’ll confirm availability and delivery time on WhatsApp.*
     `;
-
     const whatsappUrl =
-      "https://wa.me/919910646415?text=" + encodeURIComponent(message);
+      "https://wa.me/919910646415?text=" + encodeURIComponent(whatsappMessage);
 
     window.open(whatsappUrl, "_blank");
   };
@@ -127,6 +150,7 @@ export function CheckoutForm() {
 
     if (formData.Address != "" && formData.MobileNumber != "") {
       sendToWhatsapp();
+      clearCart();
     } else {
       setFormError(true);
     }
@@ -139,7 +163,7 @@ export function CheckoutForm() {
     const value = e?.target?.value;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
-console.log("cartItems",cartItems)
+  console.log("cartItems", cartItems);
   return (
     <Card>
       <CardHeader>
@@ -147,16 +171,20 @@ console.log("cartItems",cartItems)
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="flex justify-between">
-          <span>₹3/day (30-day minimum)</span>*{cartItems?.[0]?.quantity}
-          <span>₹{total.toFixed(2)}</span>
+          <span>Total Books Number</span>
+          <span>{totalItems}</span>
+        </div>
+        <div className="flex justify-between">
+          <span>Total Rental charge per month</span>
+          <span>{totalItems*30}</span>
         </div>
         <div className="flex justify-between">
           <span>One-time delivery & return fee</span>
-          <span>₹{deliveryFee.toFixed(2)}</span>
+          <span>₹{deliveryFee}</span>
         </div>
         <div className="flex justify-between font-bold">
           <span>Total</span>
-          <span>₹{grandTotal.toFixed(2)}</span>
+          <span>₹{totalItems*30+deliveryFee}</span>
         </div>
 
         <div className="pt-4 border-t">
@@ -183,7 +211,7 @@ console.log("cartItems",cartItems)
                     Please fill this field
                   </span>
                 )}
-                { fetchingAddress && (
+                {fetchingAddress && (
                   <div className="absolute top-0 right-2">
                     <svg
                       className="h-7 w-7 text-orange-600 animate-spin"
