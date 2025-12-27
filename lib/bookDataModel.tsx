@@ -25,6 +25,7 @@ export interface BookItem {
     allowAnonLogging: boolean
     contentVersion: string
     panelizationSummary: PanelizationSummary
+    industryIdentifiers: industryIdentifiersItem[],
     imageLinks: ImageLinks
     language: string
     previewLink: string
@@ -32,6 +33,10 @@ export interface BookItem {
     canonicalVolumeLink: string
   }
   
+  export interface industryIdentifiersItem{
+    type:string,
+    identifier:string
+  }
   export interface ReadingModes {
     text: boolean
     image: boolean

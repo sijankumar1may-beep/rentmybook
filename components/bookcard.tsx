@@ -33,6 +33,7 @@ export function BookCard({ book }: BookProps) {
     infoLink,
   } = book.volumeInfo;
   const { listPrice, retailPrice } = book.saleInfo;
+  const { embeddable } = book.accessInfo;
   return (
     <Card className="overflow-hidden rounded-2xl shadow-md hover:shadow-xl transition">
       {/* Image Section */}
@@ -106,6 +107,17 @@ export function BookCard({ book }: BookProps) {
         </>
         )} */}
             </div>
+
+            <div className="flex flex-wrap gap-2 text-xs">
+              {embeddable && (
+                <>
+                  <span className="px-2 py-1 rounded font-semibold text-orange-600">
+                    Preview available
+                  </span>
+                </>
+              )}
+            </div>
+            <p className="text-blue-600 font-medium mt-2">View details →</p>
           </CardContent>
         </div>
       </a>

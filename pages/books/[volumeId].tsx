@@ -4,6 +4,7 @@ import { GetServerSideProps } from "next";
 import { useCart } from "@/context/cart-context";
 import { useToast } from "@/hooks/use-toast";
 import Script from "next/script";
+import GoogleBookViewer from "@/components/GoogleBookViewer";
 import Link from "next/link";
 const BookInfo = (props: { bookData: BookItem }) => {
   const {toast}=useToast();
@@ -14,6 +15,8 @@ const BookInfo = (props: { bookData: BookItem }) => {
     (total, item) => total + item.quantity,
     0
   );
+  console.log("volumeInfovolumeInfo",volumeInfo)
+  console.log("props?.bookData?.volumeInfo?.industryIdentifiers?.[0]?.indentifier",volumeInfo?.industryIdentifiers?.[0]?.identifier)
   const coverImage =
     volumeInfo.imageLinks?.extraLarge ||
     volumeInfo.imageLinks?.large ||
@@ -151,6 +154,7 @@ const BookInfo = (props: { bookData: BookItem }) => {
         <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6 text-sm">
           <InfoBox label="Pages" value={volumeInfo.pageCount} />
         </div>
+        <GoogleBookViewer isbn={props?.bookData?.volumeInfo?.industryIdentifiers?.[0]?.identifier} />
       </div>
       {totalItems > 0 && (
         <Link
